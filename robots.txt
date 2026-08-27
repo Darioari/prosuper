@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap oficial Pró Super
+Sitemap: https://prosuperconsultoria.com.br/sitemap.xml
