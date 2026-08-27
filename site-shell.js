@@ -190,6 +190,54 @@
     a.addEventListener('click', (e) => createRipple(e, a));
   });
 
+  // Máscara Universal de Telefone / WhatsApp: (11) 9 9999-9999
+  function initPhoneMasks() {
+    const formatPhone = (val) => {
+      let digits = val.replace(/\D/g, '').slice(0, 11);
+      if (!digits) return '';
+      if (digits.length <= 2) {
+        return `(${digits}`;
+      }
+      if (digits.length <= 3) {
+        return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+      }
+      if (digits.length <= 7) {
+        return `(${digits.slice(0, 2)}) ${digits.slice(2, 3)} ${digits.slice(3)}`;
+      }
+      if (digits.length <= 10) {
+        return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+      }
+      return `(${digits.slice(0, 2)}) ${digits.slice(2, 3)} ${digits.slice(3, 7)}-${digits.slice(7, 11)}`;
+    };
+
+    const inputs = document.querySelectorAll('input#phone, input[name="phone"], input[type="tel"], input[placeholder*="WhatsApp"]');
+    inputs.forEach(input => {
+      input.setAttribute('type', 'tel');
+      input.setAttribute('inputmode', 'numeric');
+      input.setAttribute('autocomplete', 'tel');
+      input.setAttribute('maxlength', '17');
+      if (!input.placeholder || input.placeholder === 'WhatsApp' || input.placeholder.includes('DDD')) {
+        input.setAttribute('placeholder', '(11) 9 9999-9999');
+      }
+
+      input.addEventListener('input', () => {
+        input.value = formatPhone(input.value);
+      });
+      input.addEventListener('blur', () => {
+        input.value = formatPhone(input.value);
+      });
+      if (input.value) {
+        input.value = formatPhone(input.value);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPhoneMasks);
+  } else {
+    initPhoneMasks();
+  }
+
   if (!window.__proSuperPremiumLoaded) {
     window.__proSuperPremiumLoaded = true;
     const premiumScript = document.createElement('script');
